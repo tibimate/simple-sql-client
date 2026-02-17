@@ -1,18 +1,37 @@
 import type { Connection as MySQLConnection } from "mysql2/promise";
 import type { MySQLConnection as MySQLConnectionConfig } from "@/ipc/connections/schemas";
+import { mainLogger } from "@/utils/main-logger";
 
 export const connectMySQL = async (
   config: MySQLConnectionConfig
 ): Promise<MySQLConnection> => {
-  const mysql = await import("mysql2/promise");
-  return mysql.createConnection({
-    host: config.host,
-    port: config.port,
-    user: config.username,
-    password: config.password,
-    database: config.database,
-    ssl: config.ssl ? {} : undefined,
-  });
+  try {
+    mainLogger.info("Loading mysql2/promise module...");
+    const mysql = await import("mysql2/promise");
+    mainLogger.info("mysql2/promise module loaded successfully");
+    
+    mainLogger.info("Creating MySQL connection", {
+      host: config.host,
+      port: config.port,
+      database: config.database,
+      username: config.username,
+    });
+    
+    const connection = await mysql.createConnection({
+      host: config.host,
+      port: config.port,
+      user: config.username,
+      password: config.password,
+      database: config.database,
+      ssl: config.ssl ? {} : undefined,
+    });
+    
+    mainLogger.info("MySQL connection created successfully");
+    return connection;
+  } catch (error) {
+    mainLogger.error("Failed to connect to MySQL", error);
+    throw error;
+  }
 };
 
 export const disconnectMySQL = async (

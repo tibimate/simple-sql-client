@@ -13,7 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "../ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface AddRowDialogProps {
   open: boolean;
@@ -179,11 +185,7 @@ function BooleanField({
       <Select
         disabled={column.autoIncrement || isNull}
         onValueChange={(value) =>
-          handleValueChange(
-            value,
-            onValueChange,
-            onLastNonNullChange
-          )
+          handleValueChange(value, onValueChange, onLastNonNullChange)
         }
         required={!(column.nullable || column.autoIncrement)}
         value={value}
@@ -230,11 +232,7 @@ function EnumField({
       <Select
         disabled={column.autoIncrement || isNull}
         onValueChange={(value) =>
-          handleValueChange(
-            value,
-            onValueChange,
-            onLastNonNullChange
-          )
+          handleValueChange(value, onValueChange, onLastNonNullChange)
         }
         required={!(column.nullable || column.autoIncrement)}
         value={value ?? ""}
@@ -243,11 +241,11 @@ function EnumField({
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent>
-        {getEnumValues(column.type).map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
-          </SelectItem>
-        ))}
+          {getEnumValues(column.type).map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </>
@@ -399,7 +397,7 @@ export function AddRowDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="sm:max-w-5xl text-zinc-700 dark:text-zinc-300">
+      <DialogContent className="text-zinc-700 sm:max-w-5xl dark:text-zinc-300">
         <DialogHeader>
           <DialogTitle>Add New Row</DialogTitle>
           <DialogDescription>
@@ -423,7 +421,7 @@ export function AddRowDialog({
                 value={values[column.name] ?? ""}
               />
             ))}
-            <DialogFooter className="flex justify-end gap-2 dark:border-zinc-700 border-gray-200 border-t pt-4">
+            <DialogFooter className="flex justify-end gap-2 border-gray-200 border-t pt-4 dark:border-zinc-700">
               <Button
                 disabled={isAdding}
                 onClick={() => onOpenChange(false)}

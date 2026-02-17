@@ -3,9 +3,9 @@ import { Database, Plus, Server } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Connection } from "@/ipc/connections/schemas";
 import { ipc } from "@/ipc/manager";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const DatabaseTypeIcons = {
   postgres: { icon: "🐘", color: "blue", label: "PostgreSQL" },
@@ -45,11 +45,11 @@ function HomePage() {
   return (
     <ScrollArea className="h-screen overflow-y-auto dark:bg-gradient-to-br dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-800">
       {/* Hero Section */}
-      <div className="dark:border-zinc-700/50 border-b border-zinc-200">
-        <div className=" px-6 pt-4 pb-16">
+      <div className="border-zinc-200 border-b dark:border-zinc-700/50">
+        <div className="px-6 pt-4 pb-16">
           <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
             <div className="flex-1">
-              <h1 className="mb-4 font-bold text-4xl text-zinc-800 dark:text-zinc-300 tracking-tight md:text-5xl">
+              <h1 className="mb-4 font-bold text-4xl text-zinc-800 tracking-tight md:text-5xl dark:text-zinc-300">
                 Database Connections
               </h1>
               <p className="max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
@@ -58,11 +58,11 @@ function HomePage() {
               </p>
             </div>
             <Button
-              className="gap-2 flex items-center"
+              className="flex items-center gap-2"
               onClick={handleCreateConnection}
               size="lg"
             >
-              <Plus className="h-5 w-5 inline" />
+              <Plus className="inline h-5 w-5" />
               <span className="leading-none">New Connection</span>
             </Button>
           </div>
@@ -85,20 +85,19 @@ function HomePage() {
               ] as const
             ).map((db) => (
               <button
-                className="group flex flex-col items-start gap-4 rounded-lg border border-zinc-400 bg-zinc-100 dark:border-zinc-700/50 dark:bg-zinc-800/50 p-6 transition-all hover:border-blue-600 dark:hover:border-zinc-600 hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                className="group flex flex-col items-start gap-4 rounded-lg border border-zinc-400 bg-zinc-100 p-6 transition-all hover:border-blue-600 hover:bg-zinc-200 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
                 key={db.type}
                 onClick={() => navigate({ to: `/${db.type}` })}
                 type="button"
               >
-                <div className="text-3xl flex items-center gap-x-4">
+                <div className="flex items-center gap-x-4 text-3xl">
                   {db.icon}
-                  <h3 className="font-semibold text-zinc-700 text-lg dark:text-zinc-300 group-hover:text-blue-400">
+                  <h3 className="font-semibold text-lg text-zinc-700 group-hover:text-blue-400 dark:text-zinc-300">
                     {db.label}
                   </h3>
                 </div>
                 <div>
-                  
-                  <p className="dark:text-zinc-400 text-zinc-600 text-sm">
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
                     Create a new connection
                   </p>
                 </div>
@@ -136,12 +135,12 @@ function HomePage() {
           )}
 
           {!isLoading && connections.length === 0 && (
-            <div className="rounded-lg border border-zinc-100 dark:border-zinc-700 border-dashed dark:bg-zinc-800/30 px-8 py-12 text-center">
+            <div className="rounded-lg border border-zinc-100 border-dashed px-8 py-12 text-center dark:border-zinc-700 dark:bg-zinc-800/30">
               <Database className="mx-auto mb-4 h-12 w-12 text-zinc-500 dark:text-zinc-400" />
-              <h3 className="mb-2 font-semibold dark:text-zinc-300 text-xl">
+              <h3 className="mb-2 font-semibold text-xl dark:text-zinc-300">
                 No connections yet
               </h3>
-              <p className="mb-6 dark:text-zinc-400 text-zinc-600">
+              <p className="mb-6 text-zinc-600 dark:text-zinc-400">
                 Create your first database connection to get started
               </p>
               <Button
@@ -168,7 +167,7 @@ function HomePage() {
 
                 return (
                   <button
-                    className="group rounded-lg border border-zinc-400 bg-zinc-100 dark:border-zinc-700/50 dark:bg-zinc-800/50 p-5 text-left transition-all hover:border-blue-500/50 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:shadow-zinc-300 dark:hover:shadow-blue-500/10 hover:shadow-md"
+                    className="group rounded-lg border border-zinc-400 bg-zinc-100 p-5 text-left transition-all hover:border-blue-500/50 hover:bg-zinc-200 hover:shadow-md hover:shadow-zinc-300 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 dark:hover:shadow-blue-500/10"
                     key={connection.id}
                     onClick={() => handleConnectionClick(connection)}
                     type="button"
@@ -177,10 +176,10 @@ function HomePage() {
                       <div className="flex min-w-0 flex-1 items-center gap-4">
                         <div className="text-3xl">{dbInfo.icon}</div>
                         <div className="min-w-0 flex-1">
-                          <h3 className="truncate font-semibold dark:text-white text-zinc-700 group-hover:text-blue-400">
+                          <h3 className="truncate font-semibold text-zinc-700 group-hover:text-blue-400 dark:text-white">
                             {connection.name}
                           </h3>
-                          <p className="truncate text-zinc-400 text-sm">
+                          <p className="truncate text-sm text-zinc-400">
                             {displayName}
                           </p>
                           <div className="mt-2 flex items-center gap-2">
@@ -190,7 +189,7 @@ function HomePage() {
                             >
                               {dbInfo.label}
                             </Badge>
-                            <span className="text-zinc-500 text-xs dark:text-zinc-400">
+                            <span className="text-xs text-zinc-500 dark:text-zinc-400">
                               {new Date(
                                 connection.createdAt
                               ).toLocaleDateString()}
@@ -209,16 +208,20 @@ function HomePage() {
 
         {/* Footer Info */}
         {connections.length > 0 && (
-          <div className="mt-12 rounded-lg border border-zinc-600 bg-zinc-200 dark:border-zinc-700/30 dark:bg-zinc-800/20 p-6">
+          <div className="mt-12 rounded-lg border border-zinc-600 bg-zinc-200 p-6 dark:border-zinc-700/30 dark:bg-zinc-800/20">
             <div className="grid gap-6 md:grid-cols-3">
               <div>
-                <p className="dark:text-zinc-400 text-zinc-500 text-sm">Total Connections</p>
-                <p className="font-bold text-2xl dark:text-white text-zinc-800">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  Total Connections
+                </p>
+                <p className="font-bold text-2xl text-zinc-800 dark:text-white">
                   {connections.length}
                 </p>
               </div>
               <div>
-                <p className="text-zinc-500 dark:text-zinc-400 text-sm">Database Types</p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  Database Types
+                </p>
                 <p className="flex gap-2">
                   {Array.from(new Set(connections.map((c) => c.type))).map(
                     (type) => {
@@ -240,7 +243,9 @@ function HomePage() {
                 </p>
               </div>
               <div>
-                <p className="text-zinc-500 dark:text-zinc-400 text-sm">Last Updated</p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  Last Updated
+                </p>
                 <p className="font-semibold text-sm text-zinc-700 dark:text-white">
                   {connections.length > 0
                     ? new Date(

@@ -1,4 +1,4 @@
-const IDENTIFIER_PART_PATTERN = "(?:`[^`]+`|\"[^\"]+\"|\[[^\]]+\]|[A-Za-z0-9_]+)";
+const IDENTIFIER_PART_PATTERN = '(?:`[^`]+`|"[^"]+"|[[^]]+]|[A-Za-z0-9_]+)';
 const IDENTIFIER_PATTERN = `(${IDENTIFIER_PART_PATTERN}(?:\\.${IDENTIFIER_PART_PATTERN})*)`;
 
 const stripSqlComments = (input: string): string =>
@@ -12,7 +12,7 @@ const stripIdentifierWrapper = (value: string): string => {
   if (trimmed.startsWith("`") && trimmed.endsWith("`")) {
     return trimmed.slice(1, -1);
   }
-  if (trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
+  if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
     return trimmed.slice(1, -1);
   }
   return trimmed;

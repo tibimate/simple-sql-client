@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -25,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { ScrollArea } from "../ui/scroll-area";
 
 const ENUM_REGEX = /enum\((.*)\)/i;
 
@@ -107,21 +107,21 @@ export function DataTable({
       <table className="w-full border-collapse border border-gray-300 dark:border-zinc-700">
         <thead>
           <tr className="bg-gray-100 dark:bg-zinc-900">
-            <th className="dark:text-zinc-200 w-4 border border-gray-300 px-4 py-2 text-left font-semibold text-xs dark:border-zinc-700">
+            <th className="w-4 border border-gray-300 px-4 py-2 text-left font-semibold text-xs dark:border-zinc-700 dark:text-zinc-200">
               <Checkbox
                 checked={rows.length > 0 && selectedRows.size === rows.length}
                 disabled={rows.length === 0}
                 onCheckedChange={(_checked) => onSelectAll()}
               />
             </th>
-            <th className="dark:text-zinc-200 w-4 border border-gray-300 text-center font-semibold text-xs dark:border-zinc-700">
+            <th className="w-4 border border-gray-300 text-center font-semibold text-xs dark:border-zinc-700 dark:text-zinc-200">
               <Button disabled size="icon" variant="ghost">
                 <PencilIcon className="h-3 w-3" />
               </Button>
             </th>
             {columns.map((col) => (
               <th
-                className="dark:text-zinc-200 border border-gray-300 px-4 py-2 text-left font-semibold text-xs dark:border-zinc-700"
+                className="border border-gray-300 px-4 py-2 text-left font-semibold text-xs dark:border-zinc-700 dark:text-zinc-200"
                 key={col}
               >
                 <button
@@ -574,8 +574,8 @@ function Row({
       <tr
         className={
           idx % 2 === 0
-            ? "bg-white dark:bg-zinc-700 text-gray-900 dark:text-zinc-400"
-            : "bg-gray-50 dark:bg-zinc-600 text-gray-900 dark:text-zinc-400"
+            ? "bg-white text-gray-900 dark:bg-zinc-700 dark:text-zinc-400"
+            : "bg-gray-50 text-gray-900 dark:bg-zinc-600 dark:text-zinc-400"
         }
         key={idx}
       >
@@ -620,13 +620,13 @@ function Row({
                       : "cursor-default";
                   })()}
                   onClick={() => handleCellClick(col)}
+                  onDoubleClick={() => handleCellDoubleClick(col)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
                       handleCellClick(col);
                     }
                   }}
-                  onDoubleClick={() => handleCellDoubleClick(col)}
                   role="button"
                   tabIndex={0}
                 >

@@ -1,11 +1,23 @@
 import type { Pool } from "pg";
 import type { PostgresConnection } from "@/ipc/connections/schemas";
+import { mainLogger } from "@/utils/main-logger";
 
 export const connectPostgres = async (
   config: PostgresConnection
 ): Promise<Pool> => {
-  const { Pool } = await import("pg");
-  const pool = new Pool({
+  try {
+    mainLogger.info("Loading pg module...");
+    const { Pool } = await import("pg");
+    mainLogger.info("pg module loaded successfully");
+    
+    mainLogger.info("Creating Postgres connection pool", {
+      host: config.host,
+      port: config.port,
+      database: config.database,
+      username: config.username,
+    });
+    
+    const pool = new Pool({
     host: config.host,
     port: config.port,
     user: config.username,
@@ -14,10 +26,16 @@ export const connectPostgres = async (
     ssl: config.ssl ? { rejectUnauthorized: false } : false,
   });
 
-  const testClient = await pool.connect();
-  testClient.release();
+    mainLogger.info("Testing Postgres connection...");
+    const testClient = await pool.connect();
+    testClient.release();
+    mainLogger.info("Postgres connection test successful");
 
-  return pool;
+    return pool;
+  } catch (error) {
+    mainLogger.error("Failed to connect to Postgres", error);
+    throw error;
+  }
 };
 
 export const disconnectPostgres = async (pool: Pool): Promise<void> => {

@@ -82,7 +82,7 @@ export function AddConnectionDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="sm:max-w-[500px] text-zinc-700 dark:text-zinc-300">
+      <DialogContent className="text-zinc-700 sm:max-w-[500px] dark:text-zinc-300">
         <form onSubmit={handleSubmit} ref={formRef}>
           <DialogHeader>
             <DialogTitle>

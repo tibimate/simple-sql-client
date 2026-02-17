@@ -1,6 +1,7 @@
 import { type ClientContext, createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/message-port";
 import type { RouterClient } from "@orpc/server";
+import { logger } from "@/utils/logger";
 import { IPC_CHANNELS } from "@/constants";
 import type { router } from "./router";
 
@@ -12,7 +13,8 @@ class IPCManager {
 
   private readonly rpcLink: RPCLink<ClientContext>;
 
-  private initialized = false;
+  initialized = false;
+  private initPromise: Promise<void> | null = null;
 
   readonly client: RPCClient;
 
@@ -26,6 +28,16 @@ class IPCManager {
       port: this.clientPort,
     });
     this.client = createORPCClient(this.rpcLink);
+
+    // Add error handler for the port
+    this.clientPort.onerror = (event) => {
+      logger.error("MessagePort error:", event);
+    };
+
+    // Add error handler for the rpcLink
+    this.clientPort.addEventListener("error", (event) => {
+      logger.error("MessagePort error event:", event);
+    });
   }
 
   initialize() {
@@ -33,12 +45,61 @@ class IPCManager {
       return;
     }
 
-    this.clientPort.start();
+    if (this.initPromise) {
+      return this.initPromise;
+    }
 
-    window.postMessage(IPC_CHANNELS.START_ORPC_SERVER, "*", [this.serverPort]);
-    this.initialized = true;
+    this.initPromise = new Promise<void>((resolve) => {
+      try {
+        logger.info("Starting IPC client port");
+        this.clientPort.start();
+        logger.info("IPC client port started successfully");
+
+        logger.info("Sending ORPC server initialization message with serverPort");
+        window.postMessage(IPC_CHANNELS.START_ORPC_SERVER, "*", [
+          this.serverPort,
+        ]);
+        logger.info("ORPC initialization message sent");
+
+        this.initialized = true;
+
+        // Resolve immediately - ORPC upgrade is synchronous
+        resolve();
+      } catch (error) {
+        logger.error("Failed to initialize IPC manager:", error);
+        resolve(); // Resolve anyway so the app doesn't hang
+      }
+    });
+
+    return this.initPromise;
+  }
+
+  waitForInit(): Promise<void> {
+    if (this.initialized) {
+      return Promise.resolve();
+    }
+    return this.initPromise || Promise.resolve();
   }
 }
 
 export const ipc = new IPCManager();
-ipc.initialize();
+
+// Initialize immediately, but wrapped in try-catch
+try {
+  logger.info("📡 Module loaded, initializing IPC manager");
+  ipc.initialize();
+} catch (error) {
+  logger.error("❌ Error during IPC manager initialization:", error);
+}
+
+// Add a safety check - if still not initialized after 10 seconds, try again
+setTimeout(() => {
+  try {
+    if (!ipc.initialized) {
+      logger.warn("⚠️ IPC not initialized after 10s, attempting retry");
+      ipc.initialize();
+    }
+  } catch (error) {
+    logger.error("❌ Error during IPC manager retry:", error);
+  }
+}, 10_000);

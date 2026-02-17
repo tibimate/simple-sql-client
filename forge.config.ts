@@ -1,15 +1,19 @@
+import path from "node:path";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { MakerDeb } from "@electron-forge/maker-deb";
 import { MakerRpm } from "@electron-forge/maker-rpm";
 import { MakerSquirrel } from "@electron-forge/maker-squirrel";
 import { MakerZIP } from "@electron-forge/maker-zip";
+import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-natives";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 
 const config: ForgeConfig = {
   packagerConfig: {
-    asar: true,
+    asar: {
+      unpack: "**/node_modules/{better-sqlite3,pg,mysql2,mysql2/**}",
+    },
   },
   rebuildConfig: {},
   makers: [
@@ -36,6 +40,7 @@ const config: ForgeConfig = {
     },
   ],
   plugins: [
+    new AutoUnpackNativesPlugin({}),
     new VitePlugin({
       build: [
         {
@@ -63,10 +68,30 @@ const config: ForgeConfig = {
       [FuseV1Options.EnableCookieEncryption]: true,
       [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
       [FuseV1Options.EnableNodeCliInspectArguments]: false,
-      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
-      [FuseV1Options.OnlyLoadAppFromAsar]: true,
+      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: false,
+      [FuseV1Options.OnlyLoadAppFromAsar]: false,
     }),
   ],
+  hooks: {
+    postPackage: async (_config, packageResult) => {
+      const fs = await import("node:fs");
+      const srcModules = path.join(import.meta.dirname, "node_modules");
+      const appPath = packageResult.outputPaths[0];
+      const appName = "Simple SQL Client.app";
+      const destModules = path.join(
+        appPath,
+        appName,
+        "Contents/Resources/node_modules"
+      );
+
+      if (!fs.existsSync(destModules)) {
+        fs.cpSync(srcModules, destModules, { recursive: true });
+        console.log(
+          `Copied all node_modules to packaged app at ${destModules}`
+        );
+      }
+    },
+  },
 };
 
 export default config;

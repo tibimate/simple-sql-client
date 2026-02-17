@@ -2,6 +2,7 @@ import { os } from "@orpc/server";
 import { dialog } from "electron";
 import { z } from "zod";
 import { ipcContext } from "../context";
+import { mainLogger } from "@/utils/main-logger";
 import {
   type Connection,
   CreateConnectionInput,
@@ -10,7 +11,10 @@ import {
 import { connectionStorage } from "./storage";
 
 export const getAllConnections = os.handler(() => {
-  return connectionStorage.getAllConnections();
+  mainLogger.info("Getting all connections");
+  const connections = connectionStorage.getAllConnections();
+  mainLogger.info("Found connections:", connections.length);
+  return connections;
 });
 
 export const getConnectionById = os

@@ -38,7 +38,6 @@ import { Button } from "@/components/ui/button";
 import type { SQLiteConnection } from "@/ipc/connections/schemas";
 import { ipc } from "@/ipc/manager";
 import { extractPrimaryTableName } from "@/utils/sql";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const Route = createFileRoute("/sqlite/$id")({
   component: RouteComponent,

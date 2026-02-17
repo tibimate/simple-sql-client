@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface EditRowDialogProps {
   open: boolean;
@@ -259,11 +265,11 @@ function EnumField({
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent>
-        {getEnumValues(column.type).map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
-          </SelectItem>
-        ))}
+          {getEnumValues(column.type).map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </>
@@ -389,7 +395,7 @@ export function EditRowDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="sm:max-w-5xl text-zinc-700 dark:text-zinc-300">
+      <DialogContent className="text-zinc-700 sm:max-w-5xl dark:text-zinc-300">
         <DialogHeader>
           <DialogTitle>Edit Row</DialogTitle>
           <DialogDescription>
@@ -397,7 +403,6 @@ export function EditRowDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="-mx-4 max-h-[80vh] overflow-y-auto px-4">
-          
           <form className="space-y-4 py-4" onSubmit={handleSubmit}>
             {columns.map((column) => (
               <ColumnField

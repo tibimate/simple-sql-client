@@ -1,5 +1,6 @@
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
-import { HomeIcon, icons, LayoutDashboard } from "lucide-react";
+import clsx from "clsx";
+import { icons, LayoutDashboard } from "lucide-react";
 import type * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { getCurrentTheme, setTheme } from "@/actions/theme";
@@ -24,7 +25,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { Connection, ConnectionType } from "@/ipc/connections/schemas";
@@ -33,7 +33,6 @@ import type { ThemeMode } from "@/types/theme-mode";
 import { AddConnectionDialog } from "./add-connection-dialog";
 import { EditConnectionDialog } from "./edit-connection-dialog";
 import { Button } from "./ui/button";
-import clsx from "clsx";
 
 interface NavigationGroup {
   groupTitle: string;
@@ -200,23 +199,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         className="border-r-zinc-200 bg-zinc-100 pt-9 dark:border-zinc-800 dark:bg-zinc-950"
       >
         <SidebarContent className="flex flex-col px-1">
-          <SidebarGroup className="px-0 mb-3">
+          <SidebarGroup className="mb-3 px-0">
             <SidebarGroupLabel className="px-0">
               <Link
-                  className={clsx(
-                    "w-full flex items-center gap-2 py-2 rounded shadow px-3 bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-900 hover:bg-primary/10 text-zinc-800 hover:text-zinc-600 dark:text-zinc-200 dark:hover:text-zinc-300",
-                    location.pathname === "/" ? "bg-primary/10 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200" : "hover:bg-primary/10 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-                  )}
-                  to="/"
-                >
-                  <LayoutDashboard className="size-4" />
-                  Dashboard
+                className={clsx(
+                  "flex w-full items-center gap-2 rounded bg-gray-200 px-3 py-2 text-zinc-800 shadow hover:bg-primary/10 hover:text-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-900 dark:hover:text-zinc-300",
+                  location.pathname === "/"
+                    ? "bg-primary/10 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+                    : "hover:bg-primary/10 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                )}
+                to="/"
+              >
+                <LayoutDashboard className="size-4" />
+                Dashboard
               </Link>
             </SidebarGroupLabel>
           </SidebarGroup>
           {groupedConnections.map((group) => (
             <SidebarGroup
-              className="mb-1 rounded bg-white dark:bg-zinc-800 shadow"
+              className="mb-1 rounded bg-white shadow dark:bg-zinc-800"
               key={group.groupTitle}
             >
               <SidebarGroupLabel className="flex items-center justify-between font-bold uppercase">
@@ -241,7 +242,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   {(() => {
                     if (isLoading) {
                       return (
-                        <div className="px-4 py-2 text-zinc-500 text-sm dark:text-zinc-400">
+                        <div className="px-4 py-2 text-sm text-zinc-500 dark:text-zinc-400">
                           Loading...
                         </div>
                       );
@@ -249,7 +250,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
                     if (group.items.length === 0) {
                       return (
-                        <div className="px-4 py-2 text-zinc-500 text-sm dark:text-zinc-400">
+                        <div className="px-4 py-2 text-sm text-zinc-500 dark:text-zinc-400">
                           No connections found.
                         </div>
                       );
@@ -262,7 +263,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           <SidebarMenuButton
                             asChild
                             className={`pr-12 hover:bg-primary/10 hover:text-zinc-700 dark:hover:text-zinc-100 ${
-                              isActive ? "bg-primary/10 text-zinc-800 dark:text-zinc-200" : "text-zinc-800 dark:text-zinc-300"
+                              isActive
+                                ? "bg-primary/10 text-zinc-800 dark:text-zinc-200"
+                                : "text-zinc-800 dark:text-zinc-300"
                             }`}
                             tooltip={item.title}
                           >
@@ -455,7 +458,7 @@ const PostgresqlIcon = ({
 
 const MysqlIcon = ({
   size = 10,
-  color ="inherit",
+  color = "inherit",
   strokeWidth = 2,
   background = "transparent",
   opacity = 1,

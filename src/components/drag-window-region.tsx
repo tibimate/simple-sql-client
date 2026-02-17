@@ -35,12 +35,12 @@ export default function DragWindowRegion({ title }: DragWindowRegionProps) {
     <div className="fixed inset-x-0 top-0 z-40 flex items-stretch justify-between bg-zinc-200 dark:bg-zinc-900">
       <div className="draglayer flex-1">
         {title && !isMacOS && (
-          <div className="flex flex-1 select-none whitespace-nowrap p-2 text-zinc-600 text-xs dark:text-zinc-300">
+          <div className="flex flex-1 select-none whitespace-nowrap p-2 text-xs text-zinc-600 dark:text-zinc-300">
             {title}
           </div>
         )}
         {isMacOS && (
-          <div className="flex h-8 flex-1 select-none whitespace-nowrap p-2 text-zinc-600 text-xs dark:text-zinc-300">
+          <div className="flex h-8 flex-1 select-none whitespace-nowrap p-2 text-xs text-zinc-600 dark:text-zinc-300">
             {/* Maintain the same height but do not display content */}
           </div>
         )}
@@ -54,7 +54,7 @@ function WindowButtons() {
   return (
     <div className="flex">
       <button
-        className="p-2 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700"
+        className="p-2 hover:bg-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-700"
         onClick={minimizeWindow}
         title="Minimize"
         type="button"
@@ -70,7 +70,7 @@ function WindowButtons() {
         </svg>
       </button>
       <button
-        className="p-2 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700"
+        className="p-2 hover:bg-zinc-300 dark:text-zinc-400 dark:hover:bg-zinc-700"
         onClick={maximizeWindow}
         title="Maximize"
         type="button"
@@ -93,7 +93,7 @@ function WindowButtons() {
         </svg>
       </button>
       <button
-        className="p-2 dark:text-zinc-400 hover:bg-red-300 dark:hover:bg-red-700"
+        className="p-2 hover:bg-red-300 dark:text-zinc-400 dark:hover:bg-red-700"
         onClick={closeWindow}
         title="Close"
         type="button"

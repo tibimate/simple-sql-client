@@ -16,10 +16,18 @@ export default defineConfig({
         "mysql2",
         "mysql2/promise",
         "better-sqlite3",
+        "electron",
       ],
     },
   },
   ssr: {
-    external: ["pg", "pg-native", "mysql2", "mysql2/promise", "better-sqlite3"],
+    external: [
+      "pg",
+      "pg-native",
+      "mysql2",
+      "mysql2/promise",
+      "better-sqlite3",
+      "electron",
+    ],
   },
 });

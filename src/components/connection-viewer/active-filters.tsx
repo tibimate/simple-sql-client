@@ -48,7 +48,7 @@ export function ActiveFilters({
           ) : null
         )}
         <Button
-          className="h-auto px-2 py-1 text-xs text-gray-600 dark:text-zinc-300"
+          className="h-auto px-2 py-1 text-gray-600 text-xs dark:text-zinc-300"
           onClick={onClearAll}
           size="sm"
           variant="ghost"

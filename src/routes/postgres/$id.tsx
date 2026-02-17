@@ -38,7 +38,6 @@ import { Button } from "@/components/ui/button";
 import type { PostgresConnection } from "@/ipc/connections/schemas";
 import { ipc } from "@/ipc/manager";
 import { extractPrimaryTableName } from "@/utils/sql";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export const Route = createFileRoute("/postgres/$id")({
   component: RouteComponent,
@@ -1111,7 +1110,7 @@ function RouteComponent() {
                             </div>
                           </div>
                         )}
-                        <div className="flex items-center justify-between  bg-zinc-100 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900">
+                        <div className="flex items-center justify-between bg-zinc-100 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900">
                           <div className="flex items-center gap-2">
                             <Button
                               className="flex items-center"

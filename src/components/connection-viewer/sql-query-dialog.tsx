@@ -58,7 +58,9 @@ export function SqlQueryDialog({
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="max-h-[80vh] sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="dark:text-zinc-300">Execute SQL Query</DialogTitle>
+          <DialogTitle className="dark:text-zinc-300">
+            Execute SQL Query
+          </DialogTitle>
           <DialogDescription>
             Write and execute custom SQL queries. Results will be displayed in
             the table view.
@@ -92,11 +94,11 @@ export function SqlQueryDialog({
             </div>
             <div className="flex justify-end gap-2 border-gray-200 border-t pt-4 dark:border-slate-700">
               <Button
+                className="text-primary"
                 disabled={isExecuting}
                 onClick={() => onOpenChange(false)}
                 type="button"
                 variant="outline"
-                className="text-primary"
               >
                 Cancel
               </Button>

@@ -3,6 +3,7 @@ import { os } from "@orpc/server";
 import { z } from "zod";
 import { dbConnectionManager } from "@/database/connection-manager";
 import { connectionStorage } from "../connections/storage";
+import { mainLogger } from "@/utils/main-logger";
 import {
   ConnectDatabaseInput,
   DeleteRowsInput,
@@ -163,16 +164,27 @@ export const connectDatabase = os
   .input(ConnectDatabaseInput)
   .handler(async ({ input }) => {
     try {
+      mainLogger.info("Attempting to connect to database:", input.connectionId);
+      
       const connection = connectionStorage.getConnectionById(
         input.connectionId
       );
       if (!connection) {
+        mainLogger.error("Connection not found:", input.connectionId);
         throw new Error("Connection not found");
       }
 
+      mainLogger.info("Found connection:", {
+        id: connection.id,
+        type: connection.type,
+        name: connection.name,
+      });
+
       await dbConnectionManager.connect(connection);
+      mainLogger.info("Successfully connected to database:", input.connectionId);
       return { success: true };
     } catch (error) {
+      mainLogger.error("Failed to connect to database:", error);
       throw toORPCError(error, "Failed to connect to database");
     }
   });

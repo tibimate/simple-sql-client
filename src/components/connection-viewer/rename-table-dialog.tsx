@@ -69,7 +69,7 @@ export function RenameTableDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="sm:max-w-md text-zinc-700 dark:text-zinc-300">
+      <DialogContent className="text-zinc-700 sm:max-w-md dark:text-zinc-300">
         <DialogHeader>
           <DialogTitle>Rename Table</DialogTitle>
           <DialogDescription>

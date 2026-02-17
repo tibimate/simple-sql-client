@@ -1,6 +1,7 @@
-import { appVersion, currentPlatfom } from "./handlers";
+import { appVersion, currentPlatfom, getLogPath } from "./handlers";
 
 export const app = {
   currentPlatfom,
   appVersion,
+  getLogPath,
 };

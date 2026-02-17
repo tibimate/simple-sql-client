@@ -2,6 +2,7 @@ import type { Database as SQLiteDatabase } from "better-sqlite3";
 import type { Connection as MySQLConnection } from "mysql2/promise";
 import type { Pool } from "pg";
 import type { Connection } from "@/ipc/connections/schemas";
+import { mainLogger } from "@/utils/main-logger";
 import {
   connectMySQL,
   disconnectMySQL,
@@ -39,10 +40,17 @@ class DatabaseConnectionManager {
   async connect(connectionConfig: Connection): Promise<void> {
     // If already connected, return
     if (this.connections.has(connectionConfig.id)) {
+      mainLogger.warn("Connection already exists", connectionConfig.id);
       return;
     }
 
     try {
+      mainLogger.info("Connecting to database", {
+        id: connectionConfig.id,
+        type: connectionConfig.type,
+        name: connectionConfig.name,
+      });
+      
       let client: DatabaseConnection;
 
       switch (connectionConfig.type) {
@@ -63,7 +71,10 @@ class DatabaseConnectionManager {
         client,
         connectedAt: new Date(),
       });
+      
+      mainLogger.info("Database connection established", connectionConfig.id);
     } catch (error) {
+      mainLogger.error("Database connection failed", error);
       throw new Error(
         `Failed to connect to database: ${error instanceof Error ? error.message : "Unknown error"}`
       );

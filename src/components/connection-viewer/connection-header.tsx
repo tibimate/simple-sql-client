@@ -6,8 +6,8 @@ import type {
   PostgresConnection,
   SQLiteConnection,
 } from "@/ipc/connections/schemas";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { cn } from "@/utils/tailwind";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface ConnectionHeaderProps {
   connection: PostgresConnection | MySQLConnection | SQLiteConnection;
@@ -44,7 +44,7 @@ export function ConnectionHeader({
     <div className="fixed top-8 z-10 h-12 w-full dark:border-zinc-700 dark:bg-zinc-950">
       <div className="flex items-center justify-between border-zinc-300 border-b bg-zinc-100 px-4 py-2 dark:border-zinc-700 dark:bg-zinc-950">
         <div className="flex flex-col gap-2">
-          <h2 className="flex items-center text-gray-600 dark:text-zinc-300 gap-2 font-bold text-lg">
+          <h2 className="flex items-center gap-2 font-bold text-gray-600 text-lg dark:text-zinc-300">
             {connection.name}
             {isConnected && <CheckCircle className="h-5 w-5 text-green-700" />}
             {isConnecting && !isConnected && (
@@ -78,16 +78,23 @@ export function ConnectionHeader({
           {isConnected ? (
             <div className="flex items-center gap-2">
               <Tooltip>
-                <TooltipTrigger onClick={onDisconnect} className={cn(buttonVariants({size: "icon"}))}>
-                    <LogOut className="h-4 w-4" />
+                <TooltipTrigger
+                  className={cn(buttonVariants({ size: "icon" }))}
+                  onClick={onDisconnect}
+                >
+                  <LogOut className="h-4 w-4" />
                 </TooltipTrigger>
                 <TooltipContent>Disconnect from database</TooltipContent>
               </Tooltip>
               <Tooltip>
-                <TooltipTrigger disabled={isLoading} onClick={onRefreshTables} className={cn(buttonVariants({size: "icon"}))}>
-                    <RefreshCwIcon
-                      className={clsx("h-4 w-4", { "animate-spin": isLoading })}
-                    />
+                <TooltipTrigger
+                  className={cn(buttonVariants({ size: "icon" }))}
+                  disabled={isLoading}
+                  onClick={onRefreshTables}
+                >
+                  <RefreshCwIcon
+                    className={clsx("h-4 w-4", { "animate-spin": isLoading })}
+                  />
                 </TooltipTrigger>
                 <TooltipContent>Refresh table list</TooltipContent>
               </Tooltip>

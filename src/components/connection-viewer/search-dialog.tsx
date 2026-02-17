@@ -9,7 +9,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface SearchDialogProps {
   open: boolean;
@@ -52,7 +58,7 @@ export function SearchDialog({
           <span className="leading-none">Search</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl text-zinc-700 dark:text-zinc-300">
+      <DialogContent className="text-zinc-700 sm:max-w-2xl dark:text-zinc-300">
         <DialogHeader>
           <DialogTitle>Search {selectedTable}</DialogTitle>
           <DialogDescription>
@@ -88,11 +94,11 @@ export function SearchDialog({
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                     {getOperatorsForColumn(col).map((op) => (
-                      <SelectItem key={op.value} value={op.value}>
-                         {op.label}
-                       </SelectItem>
-                     ))}
+                      {getOperatorsForColumn(col).map((op) => (
+                        <SelectItem key={op.value} value={op.value}>
+                          {op.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

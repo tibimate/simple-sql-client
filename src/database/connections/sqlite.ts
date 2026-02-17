@@ -1,11 +1,26 @@
 import type { Database as SQLiteDatabase } from "better-sqlite3";
 import type { SQLiteConnection } from "@/ipc/connections/schemas";
+import { mainLogger } from "@/utils/main-logger";
 
 export const connectSQLite = async (
   config: SQLiteConnection
 ): Promise<SQLiteDatabase> => {
-  const Database = (await import("better-sqlite3")).default;
-  return new Database(config.filePath, { readonly: false });
+  try {
+    mainLogger.info("Loading better-sqlite3 module...");
+    const Database = (await import("better-sqlite3")).default;
+    mainLogger.info("better-sqlite3 module loaded successfully");
+    
+    mainLogger.info("Opening SQLite database", {
+      filePath: config.filePath,
+    });
+    
+    const db = new Database(config.filePath, { readonly: false });
+    mainLogger.info("SQLite database opened successfully");
+    return db;
+  } catch (error) {
+    mainLogger.error("Failed to open SQLite database", error);
+    throw error;
+  }
 };
 
 export const disconnectSQLite = async (db: SQLiteDatabase): Promise<void> => {

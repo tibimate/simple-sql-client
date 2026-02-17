@@ -102,7 +102,10 @@ export function EditConnectionDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="sm:max-w-[500px] text-zinc-700 dark:text-zinc-300" key={connection.id}>
+      <DialogContent
+        className="text-zinc-700 sm:max-w-[500px] dark:text-zinc-300"
+        key={connection.id}
+      >
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>

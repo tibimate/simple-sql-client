@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type DbType = "postgres" | "mysql" | "sqlite";
 
@@ -326,7 +332,7 @@ export function CreateTableDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="sm:max-w-4xl dark:text-zinc-300 text-zinc-700">
+      <DialogContent className="text-zinc-700 sm:max-w-4xl dark:text-zinc-300">
         <DialogHeader>
           <DialogTitle>Create Table</DialogTitle>
           <DialogDescription>
@@ -398,11 +404,11 @@ export function CreateTableDialog({
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
                         <SelectContent>
-                        {typeOptions.map((option) => (
-                          <SelectItem key={option} value={option}>
-                            {option}
-                          </SelectItem>
-                        ))}
+                          {typeOptions.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>

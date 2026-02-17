@@ -34,7 +34,7 @@ export function TableSidebar({
   onDeleteTable,
 }: TableSidebarProps) {
   return (
-    <div className="flex h-full dark:bg-zinc-900 w-64 flex-col border-r border-zinc-200 dark:border-zinc-800">
+    <div className="flex h-full w-64 flex-col border-zinc-200 border-r dark:border-zinc-800 dark:bg-zinc-900">
       <ScrollArea className="flex-1 overflow-y-auto">
         {isConnected && (
           <div>
@@ -42,7 +42,7 @@ export function TableSidebar({
               {tables.map((table) => (
                 <div className="relative" key={table}>
                   <button
-                    className={`flex w-full items-center justify-between truncate px-3 py-2 text-left text-sm  ${
+                    className={`flex w-full items-center justify-between truncate px-3 py-2 text-left text-sm ${
                       selectedTable === table
                         ? "border-blue-300 border-l-2 bg-gray-100 font-medium text-primary dark:border-blue-500 dark:bg-zinc-700"
                         : "hover:bg-gray-100 dark:bg-zinc-800 dark:hover:bg-zinc-700"
@@ -59,10 +59,10 @@ export function TableSidebar({
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
+                          className="dark:text-zinc-400"
                           onClick={(e) => e.stopPropagation()}
                           size="icon"
                           variant="ghost"
-                          className="dark:text-zinc-400"
                         >
                           <EllipsisVerticalIcon className="h-3 w-3" />
                         </Button>
