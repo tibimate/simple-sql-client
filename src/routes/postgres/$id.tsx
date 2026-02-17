@@ -174,8 +174,10 @@ function RouteComponent() {
       setIsConnected(true);
       await loadTables();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to connect");
+      const message = err instanceof Error ? err.message : "Failed to connect";
+      setError(message);
       setIsConnected(false);
+      toast.error(message);
     } finally {
       setIsConnecting(false);
       setIsLoading(false);
@@ -1041,9 +1043,7 @@ function RouteComponent() {
     searchFilters,
   ]);
 
-  if (isLoading) {
-    return <div className="p-6">Loading connection...</div>;
-  }
+
 
   if (error && !connection) {
     return <div className="p-6 text-red-600">{error}</div>;

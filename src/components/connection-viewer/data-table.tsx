@@ -146,7 +146,7 @@ export function DataTable({
             if (isLoadingTable) {
               return (
                 <tr>
-                  <td className="p-4 text-center" colSpan={columns.length + 1}>
+                  <td className="p-4 text-center" colSpan={columns.length + 2}>
                     <Loader className="h-6 w-6 animate-spin text-gray-600 dark:text-zinc-300" />
                   </td>
                 </tr>
@@ -596,8 +596,16 @@ function Row({
         </td>
         {columns.map((col) => (
           <td
-            className="h-4 truncate border border-gray-300 px-4 py-2 text-xs dark:border-zinc-500"
+            className="h-4 truncate border border-gray-300 px-2 text-xs dark:border-zinc-500"
             key={col}
+            onClick={() => handleCellClick(col)}
+            onDoubleClick={() => handleCellDoubleClick(col)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                handleCellClick(col);
+              }
+            }}
           >
             <Popover
               onOpenChange={(open) => {
@@ -616,17 +624,10 @@ function Row({
                       return "cursor-pointer text-blue-600 hover:underline dark:text-blue-400";
                     }
                     return isEditableColumn(col)
-                      ? "cursor-text"
-                      : "cursor-default";
+                      ? "cursor-default hover:bg-yellow-50 dark:hover:bg-yellow-900/50"
+                      : "cursor-text";
                   })()}
-                  onClick={() => handleCellClick(col)}
-                  onDoubleClick={() => handleCellDoubleClick(col)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      handleCellClick(col);
-                    }
-                  }}
+                  
                   role="button"
                   tabIndex={0}
                 >
@@ -742,20 +743,22 @@ function Row({
                                   NULL
                                 </label>
                               )}
-                              <select
-                                className="w-full rounded border border-gray-300 px-2 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+                              <Select
                                 disabled={isSaving || nullSelected}
-                                onChange={(event) =>
-                                  setEditValue(event.target.value)
+                                onValueChange={(value) =>
+                                  setEditValue(value)
                                 }
                                 value={editValue}
                               >
-                                {!nullable && (
-                                  <option value="">Select value</option>
-                                )}
-                                <option value="true">True</option>
-                                <option value="false">False</option>
-                              </select>
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a value" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  
+                                  <SelectItem value="true">True</SelectItem>
+                                  <SelectItem value="false">False</SelectItem>
+                                </SelectContent>
+                              </Select>
                             </>
                           );
                         }
@@ -774,23 +777,24 @@ function Row({
                                   NULL
                                 </label>
                               )}
-                              <select
-                                className="w-full rounded border border-gray-300 px-2 py-2 text-sm"
+                              <Select
                                 disabled={isSaving || nullSelected}
-                                onChange={(event) =>
-                                  setEditValue(event.target.value)
+                                onValueChange={(value) =>
+                                  setEditValue(value)
                                 }
                                 value={editValue}
                               >
-                                {!nullable && (
-                                  <option value="">Select value</option>
-                                )}
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a value" />
+                                </SelectTrigger>
+                                <SelectContent>
                                 {getEnumValues(type).map((option) => (
-                                  <option key={option} value={option}>
+                                  <SelectItem key={option} value={option}>
                                     {option}
-                                  </option>
+                                  </SelectItem>
                                 ))}
-                              </select>
+                                </SelectContent>
+                              </Select>
                             </>
                           );
                         }

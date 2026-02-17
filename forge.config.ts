@@ -75,14 +75,28 @@ const config: ForgeConfig = {
   hooks: {
     postPackage: async (_config, packageResult) => {
       const fs = await import("node:fs");
+      const os = await import("node:os");
       const srcModules = path.join(import.meta.dirname, "node_modules");
       const appPath = packageResult.outputPaths[0];
-      const appName = "Simple SQL Client.app";
-      const destModules = path.join(
-        appPath,
-        appName,
-        "Contents/Resources/node_modules"
-      );
+      const platform = os.platform();
+
+      let destModules: string;
+
+      if (platform === "darwin") {
+        // macOS: .app bundle structure
+        const appName = "Simple SQL Client.app";
+        destModules = path.join(
+          appPath,
+          appName,
+          "Contents/Resources/node_modules"
+        );
+      } else if (platform === "win32") {
+        // Windows: resources folder
+        destModules = path.join(appPath, "resources", "node_modules");
+      } else {
+        // Linux: resources folder
+        destModules = path.join(appPath, "resources", "node_modules");
+      }
 
       if (!fs.existsSync(destModules)) {
         fs.cpSync(srcModules, destModules, { recursive: true });

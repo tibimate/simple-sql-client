@@ -74,7 +74,7 @@ export function ConnectionHeader({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pr-64">
           {isConnected ? (
             <div className="flex items-center gap-2">
               <Tooltip>
