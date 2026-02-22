@@ -7,14 +7,19 @@ import {
   installExtension,
   REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
-import { UpdateSourceType, updateElectronApp } from "update-electron-app";
+import electronSquirrelStartup from "electron-squirrel-startup";
 import { ipcContext } from "@/ipc/context";
+import { initializeAutoUpdater } from "@/updater";
 import { IPC_CHANNELS } from "./constants";
 import { mainLogger } from "@/utils/main-logger";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const inDevelopment = process.env.NODE_ENV === "development";
+
+if (electronSquirrelStartup) {
+  app.quit();
+}
 
 // Set up crash reporter to capture uncaught exceptions
 process.on("uncaughtException", (error) => {
@@ -99,12 +104,8 @@ async function installExtensions() {
 }
 
 function checkForUpdates() {
-  updateElectronApp({
-    updateSource: {
-      type: UpdateSourceType.ElectronPublicUpdateService,
-      repo: "LuanRoger/electron-shadcn",
-    },
-  });
+  const result = initializeAutoUpdater();
+  mainLogger.info(result.message);
 }
 
 async function setupORPC() {

@@ -24,4 +24,14 @@ window.addEventListener("message", (event) => {
   }
 });
 
+ipcRenderer.on(IPC_CHANNELS.UPDATER_STATUS, (_, payload) => {
+  window.postMessage(
+    {
+      type: IPC_CHANNELS.UPDATER_STATUS,
+      payload,
+    },
+    "*"
+  );
+});
+
 console.log("Preload message listener initialized");

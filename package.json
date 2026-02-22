@@ -1,7 +1,7 @@
 {
   "name": "simple-sql-client",
   "productName": "Simple SQL Client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple SQL Client built with Electron Forge and shadcn-ui (Vite + Typescript)",
   "main": ".vite/build/main.js",
   "private": false,

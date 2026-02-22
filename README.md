@@ -264,6 +264,21 @@ npm run publish
 
 Publishes to configured release channels (requires GitHub setup).
 
+### Auto Updates
+
+This app uses `update-electron-app` with the Electron Public Update Service and checks updates from GitHub releases for `tibimate/simple-sql-client`.
+
+Requirements for updates to work:
+- The app must be installed from a packaged installer (not `npm start`).
+- Release artifacts must be published on GitHub (draft releases are not visible to users).
+- `version` in `package.json` must be incremented for each release.
+
+Recommended release flow:
+1. Update `version` in `package.json`.
+2. Build installers: `npm run make`.
+3. Publish release: `npm run publish`.
+4. If published as draft, open the GitHub release and click **Publish release**.
+
 ---
 
 ## 🤝 Contributing

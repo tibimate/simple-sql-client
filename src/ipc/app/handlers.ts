@@ -1,5 +1,6 @@
 import { os } from "@orpc/server";
 import { app } from "electron";
+import { checkForUpdatesNow, installDownloadedUpdate } from "@/updater";
 import { mainLogger } from "@/utils/main-logger";
 
 export const currentPlatfom = os.handler(() => {
@@ -12,4 +13,12 @@ export const appVersion = os.handler(() => {
 
 export const getLogPath = os.handler(() => {
   return mainLogger.getLogFilePath();
+});
+
+export const checkForUpdates = os.handler(() => {
+  return checkForUpdatesNow();
+});
+
+export const installUpdate = os.handler(() => {
+  return installDownloadedUpdate();
 });

@@ -3,6 +3,8 @@ import clsx from "clsx";
 import { icons, LayoutDashboard } from "lucide-react";
 import type * as React from "react";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { checkForUpdates } from "@/actions/app";
 import { getCurrentTheme, setTheme } from "@/actions/theme";
 import {
   AlertDialog,
@@ -63,6 +65,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingConnection, setDeletingConnection] =
     useState<Connection | null>(null);
+  const [isCheckingUpdates, setIsCheckingUpdates] = useState(false);
 
   const loadConnections = useCallback(async () => {
     try {
@@ -150,6 +153,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     } finally {
       setDeleteDialogOpen(false);
       setDeletingConnection(null);
+    }
+  };
+
+  const handleCheckForUpdates = async () => {
+    setIsCheckingUpdates(true);
+
+    try {
+      const result = await checkForUpdates();
+      if (result.started) {
+        toast.success(result.message);
+        return;
+      }
+
+      toast.error(result.message);
+    } catch (error) {
+      console.error("Failed to check for updates:", error);
+      toast.error("Failed to start update check");
+    } finally {
+      setIsCheckingUpdates(false);
     }
   };
 
@@ -323,6 +345,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarContent>
 
         <SidebarFooter className="px-3 pb-4">
+          <Button
+            className="mb-2 w-full"
+            disabled={isCheckingUpdates}
+            onClick={handleCheckForUpdates}
+            size="sm"
+            variant="outline"
+          >
+            <icons.Download className="h-3.5 w-3.5" />
+            {isCheckingUpdates ? "Checking..." : "Check for updates"}
+          </Button>
           <ToggleGroup
             aria-label="Theme mode"
             className="w-full"
