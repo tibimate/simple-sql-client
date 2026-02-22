@@ -250,9 +250,11 @@ npm run make
 ```
 
 Generates platform-specific installers:
-- **Windows**: `.exe` installer (via Squirrel.Windows)
+- **Windows**: `.msi` installer (via WiX, with install-directory selection)
 - **macOS**: DMG file
 - **Linux**: Debian and RPM packages
+
+> Windows note: building the WiX installer requires WiX Toolset v3 installed on the build machine.
 
 ### Publish Releases
 

@@ -2,6 +2,7 @@ import path from "node:path";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { MakerDeb } from "@electron-forge/maker-deb";
 import { MakerRpm } from "@electron-forge/maker-rpm";
+import { MakerWix } from "@electron-forge/maker-wix";
 import { MakerSquirrel } from "@electron-forge/maker-squirrel";
 import { MakerZIP } from "@electron-forge/maker-zip";
 import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-natives";
@@ -12,11 +13,36 @@ import type { ForgeConfig } from "@electron-forge/shared-types";
 const config: ForgeConfig = {
   packagerConfig: {
     asar: {
-      unpack: "**/node_modules/{better-sqlite3,pg,mysql2,mysql2/**}",
+      unpack: "**/node_modules/{better-sqlite3,pg,mysql2,pg-types,sql-escaper/**}",
+      //unpack: "**/*.{node,dll}",
     },
+    ignore: [
+      /^\/\.git($|\/)/,
+      /^\/\.github($|\/)/,
+      /^\/\.vscode($|\/)/,
+      /^\/out($|\/)/,
+      /^\/scripts($|\/)/,
+      /^\/src($|\/)/,
+      /^\/tests?($|\/)/,
+      /^\/coverage($|\/)/,
+      /^\/README\.md$/,
+      /^\/tsconfig\.json$/,
+      /^\/vitest\.config\.ts$/,
+    ],
+    icon: path.join(import.meta.dirname, "resources", "icon"),
   },
-  rebuildConfig: {},
+  rebuildConfig: {
+    onlyModules: ["better-sqlite3", "pg", "mysql2"],
+  },
   makers: [
+    new MakerWix({
+      icon: path.join(import.meta.dirname, "resources", "icon.ico"),
+      language: 1033,
+      manufacturer: "tibimate",
+      ui: {
+        chooseDirectory: true,
+      },
+    }),
     new MakerSquirrel({}),
     new MakerZIP({}, ["darwin"]),
     new MakerRpm({}),
@@ -72,40 +98,6 @@ const config: ForgeConfig = {
       [FuseV1Options.OnlyLoadAppFromAsar]: false,
     }),
   ],
-  hooks: {
-    postPackage: async (_config, packageResult) => {
-      const fs = await import("node:fs");
-      const os = await import("node:os");
-      const srcModules = path.join(import.meta.dirname, "node_modules");
-      const appPath = packageResult.outputPaths[0];
-      const platform = os.platform();
-
-      let destModules: string;
-
-      if (platform === "darwin") {
-        // macOS: .app bundle structure
-        const appName = "Simple SQL Client.app";
-        destModules = path.join(
-          appPath,
-          appName,
-          "Contents/Resources/node_modules"
-        );
-      } else if (platform === "win32") {
-        // Windows: resources folder
-        destModules = path.join(appPath, "resources", "node_modules");
-      } else {
-        // Linux: resources folder
-        destModules = path.join(appPath, "resources", "node_modules");
-      }
-
-      if (!fs.existsSync(destModules)) {
-        fs.cpSync(srcModules, destModules, { recursive: true });
-        console.log(
-          `Copied all node_modules to packaged app at ${destModules}`
-        );
-      }
-    },
-  },
 };
 
 export default config;

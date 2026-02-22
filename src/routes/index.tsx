@@ -143,13 +143,6 @@ function HomePage() {
               <p className="mb-6 text-zinc-600 dark:text-zinc-400">
                 Create your first database connection to get started
               </p>
-              <Button
-                className="gap-2 bg-blue-600 hover:bg-blue-700"
-                onClick={handleCreateConnection}
-              >
-                <Plus className="h-4 w-4" />
-                Create Connection
-              </Button>
             </div>
           )}
 

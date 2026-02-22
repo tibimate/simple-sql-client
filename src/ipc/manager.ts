@@ -30,11 +30,6 @@ class IPCManager {
     this.client = createORPCClient(this.rpcLink);
 
     // Add error handler for the port
-    this.clientPort.onerror = (event) => {
-      logger.error("MessagePort error:", event);
-    };
-
-    // Add error handler for the rpcLink
     this.clientPort.addEventListener("error", (event) => {
       logger.error("MessagePort error event:", event);
     });
