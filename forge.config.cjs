@@ -1,18 +1,20 @@
-import path from "node:path";
-import { FuseV1Options, FuseVersion } from "@electron/fuses";
-import { MakerDeb } from "@electron-forge/maker-deb";
-import { MakerRpm } from "@electron-forge/maker-rpm";
-import { MakerWix } from "@electron-forge/maker-wix";
-import { MakerSquirrel } from "@electron-forge/maker-squirrel";
-import { MakerZIP } from "@electron-forge/maker-zip";
-import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-natives";
-import { FusesPlugin } from "@electron-forge/plugin-fuses";
-import { VitePlugin } from "@electron-forge/plugin-vite";
-import type { ForgeConfig } from "@electron-forge/shared-types";
+const path = require("node:path");
+const { FuseV1Options, FuseVersion } = require("@electron/fuses");
+const { MakerDeb } = require("@electron-forge/maker-deb");
+const { MakerRpm } = require("@electron-forge/maker-rpm");
+const { MakerWix } = require("@electron-forge/maker-wix");
+const { MakerSquirrel } = require("@electron-forge/maker-squirrel");
+const { MakerZIP } = require("@electron-forge/maker-zip");
+const {
+  AutoUnpackNativesPlugin,
+} = require("@electron-forge/plugin-auto-unpack-natives");
+const { FusesPlugin } = require("@electron-forge/plugin-fuses");
+const { VitePlugin } = require("@electron-forge/plugin-vite");
 
 const projectRoot = process.cwd();
 
-const config: ForgeConfig = {
+/** @type {import('@electron-forge/shared-types').ForgeConfig} */
+const config = {
   packagerConfig: {
     asar: {
       unpack: "**/node_modules/{better-sqlite3,pg,mysql2,pg-types,sql-escaper/**}",
@@ -52,10 +54,6 @@ const config: ForgeConfig = {
   ],
   publishers: [
     {
-      /*
-       * Publish release on GitHub as draft.
-       * Remember to manually publish it on GitHub website after verifying everything is correct.
-       */
       name: "@electron-forge/publisher-github",
       config: {
         repository: {
@@ -89,7 +87,6 @@ const config: ForgeConfig = {
         },
       ],
     }),
-
     new FusesPlugin({
       version: FuseVersion.V1,
       [FuseV1Options.RunAsNode]: false,
@@ -102,4 +99,4 @@ const config: ForgeConfig = {
   ],
 };
 
-export default config;
+module.exports = config;

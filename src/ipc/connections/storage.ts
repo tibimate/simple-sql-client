@@ -26,12 +26,22 @@ class ConnectionStorage {
   }
 
   private decryptPassword(encryptedPassword: string): string {
+    const buffer = Buffer.from(encryptedPassword, "base64");
+
     if (!safeStorage.isEncryptionAvailable()) {
       console.warn("Encryption not available, decoding from base64");
-      return Buffer.from(encryptedPassword, "base64").toString();
+      return buffer.toString();
     }
-    const buffer = Buffer.from(encryptedPassword, "base64");
-    return safeStorage.decryptString(buffer);
+
+    try {
+      return safeStorage.decryptString(buffer);
+    } catch {
+      const fallbackPassword = buffer.toString();
+      console.warn(
+        "Failed to decrypt password with safeStorage, using base64 fallback"
+      );
+      return fallbackPassword;
+    }
   }
 
   private ensureFileExists(): void {
@@ -58,10 +68,18 @@ class ConnectionStorage {
     const connections = this.readConnections();
     return connections.map((conn) => {
       if (conn.encryptedPassword) {
-        return {
-          ...conn,
-          password: this.decryptPassword(conn.encryptedPassword),
-        } as Connection;
+        try {
+          return {
+            ...conn,
+            password: this.decryptPassword(conn.encryptedPassword),
+          } as Connection;
+        } catch (error) {
+          console.warn("Failed to decode password for a stored connection", error);
+          return {
+            ...conn,
+            password: "",
+          } as Connection;
+        }
       }
       return conn as Connection;
     });

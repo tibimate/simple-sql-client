@@ -4,6 +4,8 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
+const projectRoot = process.cwd();
+
 export default defineConfig({
   plugins: [
     tanstackRouter({
@@ -20,7 +22,7 @@ export default defineConfig({
   resolve: {
     preserveSymlinks: true,
     alias: {
-      "@": path.resolve(import.meta.dirname, "./src"),
+      "@": path.resolve(projectRoot, "./src"),
     },
   },
 });

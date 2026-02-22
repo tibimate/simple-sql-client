@@ -118,10 +118,6 @@ function supportsAutoUpdater(): boolean {
     return false;
   }
 
-  if (process.platform === "darwin") {
-    return true;
-  }
-
   if (process.platform === "win32") {
     return hasSquirrelUpdateExe();
   }

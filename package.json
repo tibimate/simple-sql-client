@@ -4,6 +4,9 @@
   "version": "1.0.1",
   "description": "Simple SQL Client built with Electron Forge and shadcn-ui (Vite + Typescript)",
   "main": ".vite/build/main.js",
+  "config": {
+    "forge": "./forge.config.cjs"
+  },
   "private": false,
   "scripts": {
     "start": "electron-forge start",
@@ -59,6 +62,11 @@
     "ultracite": "^7.1.5",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.59.0",
+    "@tailwindcss/oxide-darwin-arm64": "^4.2.0",
+    "lightningcss-darwin-arm64": "^1.31.1"
   },
   "dependencies": {
     "@electron-forge/maker-squirrel": "^7.11.1",
